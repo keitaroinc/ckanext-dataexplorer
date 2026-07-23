@@ -7,8 +7,7 @@ from flask import Response
 
 import ckan.logic as logic
 from ckan.common import config, _
-from xlsxwriter.workbook import Workbook
-from xml.etree.cElementTree import Element, SubElement, ElementTree
+from xml.etree.ElementTree import Element, SubElement, ElementTree
 from ckanext.dataexplorer.helpers import (CustomJSONEncoder,
                                           remove_elements,
                                           replace)
@@ -110,11 +109,10 @@ class FileWriterService():
                                                       records,
                                                       delimiter='\t'),
                             mimetype='text/csv')
-        response.headers['Content-Type'] = b'text/tsv; charset=utf-8'
+        response.headers['Content-Type'] = 'text/tsv; charset=utf-8'
         if name:
-            response.headers['Content-disposition'] = bytes(
-                'attachment; filename="{name}.tsv"'.format(
-                    name=name), encoding='utf8')
+            response.headers['Content-disposition'] = \
+                'attachment; filename="{name}.tsv"'.format(name=name)
 
         return response
 
@@ -123,11 +121,10 @@ class FileWriterService():
                                                       records,
                                                       delimiter=','),
                             mimetype='text/csv')
-        response.headers['Content-Type'] = b'text/csv; charset=utf-8'
+        response.headers['Content-Type'] = 'text/csv; charset=utf-8'
         if name:
-            response.headers['Content-disposition'] = bytes(
-                'attachment; filename="{name}.csv"'.format(
-                    name=name), encoding='utf8')
+            response.headers['Content-disposition'] = \
+                'attachment; filename="{name}.csv"'.format(name=name)
 
         return response
 
@@ -136,11 +133,10 @@ class FileWriterService():
         response = Response(json_obj.writerow(records),
                             mimetype='application/json')
 
-        response.headers['Content-Type'] = (b'application/json; charset=utf-8')
+        response.headers['Content-Type'] = 'application/json; charset=utf-8'
         if name:
-            response.headers['Content-disposition'] = bytes(
-                'attachment; filename="{name}.json"'.format(
-                    name=name), encoding='utf8')
+            response.headers['Content-disposition'] = \
+                'attachment; filename="{name}.json"'.format(name=name)
 
         return response
 
@@ -148,26 +144,27 @@ class FileWriterService():
         xml_obj = XMLWriter(columns, records)
         response = Response(xml_obj.writerow(records),
                             mimetype='text/xml')
-        response.headers['Content-Type'] = (b'text/xml; charset=utf-8')
+        response.headers['Content-Type'] = 'text/xml; charset=utf-8'
         if name:
-            response.headers['Content-disposition'] = bytes(
-                'attachment; filename="{name}.xml"'.format(
-                        name=name), encoding='utf8')
+            response.headers['Content-disposition'] = \
+                'attachment; filename="{name}.xml"'.format(name=name)
 
         return response
 
     def _xlsx_writer(self, columns, records, response, name):
+        # Imported lazily so a missing/incompatible XlsxWriter never prevents
+        # the plugin (and therefore CKAN) from starting.
+        from xlsxwriter.workbook import Workbook
 
-        output = StringIO()
+        output = BytesIO()
 
         if hasattr(response, u'headers'):
             response.headers['Content-Type'] = (
-                b'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;\
-                    charset=utf-8')
+                'application/vnd.openxmlformats-officedocument'
+                '.spreadsheetml.sheet; charset=utf-8')
             if name:
-                response.headers['Content-disposition'] = (
-                    b'attachment; filename="{name}.xlsx"'.format(
-                        name=name.encode('utf-8')))
+                response.headers['Content-disposition'] = \
+                    'attachment; filename="{name}.xlsx"'.format(name=name)
 
         workbook = Workbook(output)
         worksheet = workbook.add_worksheet()

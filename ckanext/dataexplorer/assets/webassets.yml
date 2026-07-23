@@ -1,3 +1,8 @@
+# NOTE: the vendored libraries physically live under ``../public/vendor`` so
+# that they are also served statically (recline.js is loaded dynamically from
+# ``/vendor/recline/recline.js`` and Leaflet looks up its images there too).
+# WebAssets bundle contents are resolved relative to this ``assets`` directory,
+# so we reference them through ``../public/vendor`` to keep a single copy.
 dataexplorer_css:
   output: dataexplorer/%(version)s_dataexplorer_css.css
   extra:
@@ -20,40 +25,39 @@ dataexplorer_vendor_js:
   output: dataexplorer/%(version)s_dataexplorer_vendor_js.js
   extra:
     preload:
-      - vendor/json/json2.js
-      - vendor/flot/excanvas.js
+      - base/main
   contents:
-    - vendor/jquery/1.7.1/jquery.js
-    - vendor/underscore/1.4.4/underscore.js
-    - vendor/backbone/1.0.0/backbone.js
-    - vendor/mustache/0.5.0-dev/mustache.js
-    - vendor/bootstrap/3.2.0/js/bootstrap.js
-    - vendor/json/json2.js
-    - vendor/flot/excanvas.js
-    - vendor/flot/jquery.flot.js
-    - vendor/flot/jquery.flot.time.js
-    - vendor/leaflet/0.7.7/leaflet.js
-    - vendor/leaflet.markercluster/leaflet.markercluster.js
-    - vendor/slickgrid/2.2/jquery-ui-1.8.16.custom.js
-    - vendor/slickgrid/2.2/jquery.event.drag-2.2.js
-    - vendor/slickgrid/2.2/jquery.event.drop-2.2.js
-    - vendor/slickgrid/2.2/slick.core.js
-    - vendor/slickgrid/2.2/slick.formatters.js
-    - vendor/slickgrid/2.2/slick.editors.js
-    - vendor/slickgrid/2.2/slick.grid.js
-    - vendor/slickgrid/2.2/plugins/slick.rowselectionmodel.js
-    - vendor/slickgrid/2.2/plugins/slick.rowmovemanager.js
-    - vendor/moment/2.0.0/moment.js
-    - vendor/ckan.js/ckan.js
+    - ../public/vendor/jquery/1.7.1/jquery.js
+    - ../public/vendor/underscore/1.4.4/underscore.js
+    - ../public/vendor/backbone/1.0.0/backbone.js
+    - ../public/vendor/mustache/0.5.0-dev/mustache.js
+    - ../public/vendor/bootstrap/3.2.0/js/bootstrap.js
+    - ../public/vendor/json/json2.js
+    - ../public/vendor/flot/excanvas.js
+    - ../public/vendor/flot/jquery.flot.js
+    - ../public/vendor/flot/jquery.flot.time.js
+    - ../public/vendor/leaflet/0.7.7/leaflet.js
+    - ../public/vendor/leaflet.markercluster/leaflet.markercluster.js
+    - ../public/vendor/slickgrid/2.2/jquery-ui-1.8.16.custom.js
+    - ../public/vendor/slickgrid/2.2/jquery.event.drag-2.2.js
+    - ../public/vendor/slickgrid/2.2/jquery.event.drop-2.2.js
+    - ../public/vendor/slickgrid/2.2/slick.core.js
+    - ../public/vendor/slickgrid/2.2/slick.formatters.js
+    - ../public/vendor/slickgrid/2.2/slick.editors.js
+    - ../public/vendor/slickgrid/2.2/slick.grid.js
+    - ../public/vendor/slickgrid/2.2/plugins/slick.rowselectionmodel.js
+    - ../public/vendor/slickgrid/2.2/plugins/slick.rowmovemanager.js
+    - ../public/vendor/moment/2.0.0/moment.js
+    - ../public/vendor/ckan.js/ckan.js
 
 dataexplorer_vendor_css:
   output: dataexplorer/%(version)s_dataexplorer_vendor_css.css
   contents:
-    - vendor/bootstrap/3.2.0/css/bootstrap.css
-    - vendor/leaflet/0.7.7/leaflet.css
-    - vendor/leaflet.markercluster/MarkerCluster.css
-    - vendor/leaflet.markercluster/MarkerCluster.Default.css
-    - vendor/slickgrid/2.2/slick.grid.css
-    - vendor/recline/slickgrid.css
-    - vendor/recline/flot.css
-    - vendor/recline/map.css
+    - ../public/vendor/bootstrap/3.2.0/css/bootstrap.css
+    - ../public/vendor/leaflet/0.7.7/leaflet.css
+    - ../public/vendor/leaflet.markercluster/MarkerCluster.css
+    - ../public/vendor/leaflet.markercluster/MarkerCluster.Default.css
+    - ../public/vendor/slickgrid/2.2/slick.grid.css
+    - ../public/vendor/recline/slickgrid.css
+    - ../public/vendor/recline/flot.css
+    - ../public/vendor/recline/map.css

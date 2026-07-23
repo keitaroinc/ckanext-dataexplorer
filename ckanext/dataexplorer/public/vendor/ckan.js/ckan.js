@@ -120,6 +120,18 @@ if (isNodeModule) {
   var _browserRequest = function(options, cb) {
     var self = this;
     options.data = encodeURIComponent(JSON.stringify(options.data));
+    // CKAN >= 2.10 enforces CSRF protection on cookie-authenticated (i.e.
+    // browser logged-in) POST requests. Attach the token the same way CKAN's
+    // own client.js does, reading it from the meta tags base.html renders on
+    // every page (including this view's iframe). Harmless for anonymous users.
+    options.headers = options.headers || {};
+    var csrfField = jQuery('meta[name=csrf_field_name]').attr('content');
+    if (csrfField) {
+      var csrfToken = jQuery('meta[name=' + csrfField + ']').attr('content');
+      if (csrfToken) {
+        options.headers['X-CSRFToken'] = csrfToken;
+      }
+    }
     options.success = function(data) {
       cb(null, data);
     }
