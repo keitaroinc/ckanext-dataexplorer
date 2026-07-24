@@ -62,7 +62,6 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IResourceView, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
-    p.implements(p.IBlueprint)
     p.implements(p.ITranslation)
 
     def update_config(self, config):
@@ -73,10 +72,6 @@ class ReclineViewBase(p.SingletonPlugin, DefaultTranslation):
         toolkit.add_public_directory(config, 'public')
         toolkit.add_template_directory(config, 'templates')
         toolkit.add_resource('assets', 'dataexplorer')
-
-    # IBlueprint
-    def get_blueprint(self):
-        return [dataexplorer]
 
     def can_view(self, data_dict):
         resource = data_dict['resource']
@@ -100,6 +95,14 @@ class ReclineView(ReclineViewBase):
     '''
     This extension views resources using a Recline MultiView.
     '''
+    # Only the full Data Explorer needs the ``/dataexplorer/extract`` route
+    # (the Extractor sidebar). Registering the blueprint from every subclass
+    # would register the same blueprint twice and crash Flask on startup, so
+    # it lives here alone.
+    p.implements(p.IBlueprint)
+
+    def get_blueprint(self):
+        return [dataexplorer]
 
     def info(self):
         return {'name': 'dataexplorer',

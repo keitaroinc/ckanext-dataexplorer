@@ -82,6 +82,9 @@ setup(
     entry_points='''
         [ckan.plugins]
         dataexplorer=ckanext.dataexplorer.plugin:ReclineView
+        recline_grid_view=ckanext.dataexplorer.plugin:ReclineGridView
+        recline_graph_view=ckanext.dataexplorer.plugin:ReclineGraphView
+        recline_map_view=ckanext.dataexplorer.plugin:ReclineMapView
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan
     ''',

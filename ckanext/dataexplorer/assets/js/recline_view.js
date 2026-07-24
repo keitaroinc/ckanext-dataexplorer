@@ -132,7 +132,13 @@ this.ckan.module('dataexplorer_recline_view', function (jQuery, _) {
           state.lonField = reclineView.longitude_field;
         }
 
-        view = new recline.View.Map(this._reclineMapViewOptions(dataset, this.options.map_config));
+        // Pass the configured lat/lon (or GeoJSON) fields through to the map
+        // view. Without this the state is discarded and recline falls back to
+        // auto-detecting columns named lat/lon, so custom field names never
+        // plot any markers.
+        var mapOptions = this._reclineMapViewOptions(dataset, this.options.map_config);
+        mapOptions.state = state;
+        view = new recline.View.Map(mapOptions);
       } else if(reclineView.view_type === "recline_view" || reclineView.view_type === "dataexplorer") {
         view = this._newDataExplorer(dataset, this.options.map_config);
       } else {
