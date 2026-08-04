@@ -6,6 +6,23 @@ this.ckan.module('dataexplorer_recline_view', function (jQuery, _) {
     },
 
     initialize: function () {
+      // CKAN >= 2.10 rejects cookie-authenticated (logged-in) POSTs without a
+      // CSRF token. The recline "ckan" backend (vendor/ckan.js) issues its
+      // datastore_search POST through the *global* jQuery, so register the
+      // token as a default header on that jQuery instance. Doing it here - in a
+      // content-hashed asset that cache-busts on deploy - guarantees the fix
+      // applies even if the unversioned /vendor/ckan.js is still cached by the
+      // browser or CDN. Harmless for anonymous users (no token, no header).
+      var gjq = window.jQuery || jQuery;
+      if (gjq && gjq.ajaxSetup) {
+        var csrfField = gjq('meta[name=csrf_field_name]').attr('content');
+        var csrfToken = csrfField &&
+          gjq('meta[name=' + csrfField + ']').attr('content');
+        if (csrfToken) {
+          gjq.ajaxSetup({ headers: { 'X-CSRFToken': csrfToken } });
+        }
+      }
+
       function loadScript(url, callback)
       {
         var head = document.getElementsByTagName('head')[0];
