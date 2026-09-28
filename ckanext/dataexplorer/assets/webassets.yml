@@ -52,6 +52,7 @@ dataexplorer_vendor_js:
 
 dataexplorer_vendor_css:
   output: dataexplorer/%(version)s_dataexplorer_vendor_css.css
+  filters: cssrewrite
   contents:
     - ../public/vendor/bootstrap/3.2.0/css/bootstrap.css
     - ../public/vendor/leaflet/0.7.7/leaflet.css
